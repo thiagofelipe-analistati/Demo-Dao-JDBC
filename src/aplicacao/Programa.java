@@ -22,6 +22,12 @@ public class Programa {
 		for (Vendedor obj1: list) {
 			System.out.println(obj1);
 		}
+		System.out.println("Teste 3: Pesquisa pelo ID do todos departamento e vendedores: ");
+		list = vendededorDao.FindAll();
+		for (Vendedor obj1: list) {
+			System.out.println(obj1);
+		}
+		
 	}
 
 }
