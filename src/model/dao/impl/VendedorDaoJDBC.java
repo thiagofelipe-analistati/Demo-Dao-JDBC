@@ -55,7 +55,9 @@ public class VendedorDaoJDBC implements VendedorDao{
 			} }catch (SQLException e) {
 				throw new DbException(e.getMessage());
 			}finally {
-				DB.closeConnection();
+				// corriginindo fechamento do statement
+				//DB.closeConnection();
+				DB.closeStatement(st);
 			}
 			
 		
@@ -63,14 +65,47 @@ public class VendedorDaoJDBC implements VendedorDao{
 	}
 
 	@Override
-	public void update(Vendedor obj) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void update(Vendedor obj) { 
 
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement(
+					"UPDATE vendedor " 
+					+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? "
+					+ "WHERE Id = ?"); 
+					
+			st.setString(1, obj.getNome());
+			st.setString(2, obj.getEmail());
+			st.setDate(3, new java.sql.Date(obj.getDataNasc().getTime()));
+			st.setDouble(4, obj.getSalarioBase());
+			st.setInt(5, obj.getDepartamento().getId());
+			st.setInt(6, obj.getId());
+			
+		 st.executeUpdate();
+			
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		
+		}
+
+	}
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		PreparedStatement st = null;
+		try {
+			// correção erro na tabela.
+			st = conn.prepareStatement("DELETE FROM vendedor WHERE Id = ?");
+			st.setInt(1, id);
+			st.executeUpdate();
+		} catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}finally {
+			DB.closeStatement(st);
+		}
 		
 	}
 
@@ -84,9 +119,9 @@ public class VendedorDaoJDBC implements VendedorDao{
 					+ "FROM vendedor INNER JOIN departamento "
 					+ "ON vendedor.DepartmentId = departamento.Id "
 					+ "WHERE vendedor.Id = ?");
-
+			
 			st.setInt(1, id);
-			rs = st.executeQuery();
+			rs = st.executeQuery();;
 			if (rs.next()) {
 				Departamento dep = instanciacacaoDepartamento(rs);
 				Vendedor obj = instanciacacaoVendedor(rs, dep);
@@ -101,9 +136,7 @@ public class VendedorDaoJDBC implements VendedorDao{
 			DB.closeStatement(st);
 			DB.closeResultSet(rs);
 		}
-		}
-	
-
+	}
 	private Vendedor instanciacacaoVendedor(ResultSet rs, Departamento dep) throws SQLException {
 		Vendedor obj = new Vendedor();
 		obj.setId(rs.getInt("Id"));
@@ -119,7 +152,8 @@ public class VendedorDaoJDBC implements VendedorDao{
 		Departamento dep =new Departamento();
 		dep.setId(rs.getInt("DepartmentId"));
 		dep.setNome(rs.getString("DepName"));
-		return null;
+		// correção erro no retorno no objeto.
+		return dep;
 	}
 
 	@Override
