@@ -111,12 +111,13 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-					"SELECT * from departamento"
-					+ "WHERE Id = ?");
+					"SELECT * from departamento WHERE Id = ?");
 			st.setInt(1, id);
 			rs = st.executeQuery();;
 			if (rs.next()) {
-				Departamento dep = instanciacacaoDepartamento(rs);
+				Departamento dep =  new Departamento();
+				dep.setId(rs.getInt("Id"));
+				dep.setNome(rs.getString("Name"));
 				return dep;
 			}
 			return null;
@@ -140,10 +141,13 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 					"SELECT * from departamento");
 
 			rs = st.executeQuery();
-			
+			while (rs.next()) {
 				
-			Departamento obj = instanciacacaoDepartamento(rs);
-				list.add(obj);
+				Departamento dep =  new Departamento();
+				dep.setId(rs.getInt("Id"));
+				dep.setNome(rs.getString("Name"));
+				list.add(dep);
+			}
 			return list;
 		}catch (SQLException e) {
 			throw new DbException(e.getMessage());
@@ -153,20 +157,7 @@ public class DepartamentoDaoJDBC implements DepartamentoDao {
 			DB.closeResultSet(rs);
 		}
 }	
-
-	
-
-	private Departamento instanciacacaoDepartamento(ResultSet rs) throws SQLException {
-		Departamento dep =new Departamento();
-		dep.setId(rs.getInt("Id"));
-		dep.setNome(rs.getString("Name"));
-		// correção erro no retorno no objeto.
-		return dep;
-	}
-
-
-
-
-
-
 }
+
+
+

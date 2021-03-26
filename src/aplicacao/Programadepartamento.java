@@ -16,12 +16,12 @@ public class Programadepartamento {
 		Scanner sc = new Scanner(System.in);
 		DepartamentoDao departamentoDao = DaoFactory.createDepartamentoDao();
 		List<Departamento> list = new ArrayList<>();
-		/*
+	
 		System.out.println("Teste 1: Pesquisa pelo ID do departamento: ");
 		//VendedorDao vendededorDao = DaoFactory.createVendedordao();
 		Departamento obj = departamentoDao.findById(1);
 		System.out.println(obj);
-		*/
+		
 		System.out.println("Teste 2: Pesquisa de todos os departamentos: ");
 		list = departamentoDao.FindAll();
 		for (Departamento obj1: list) {
@@ -40,14 +40,13 @@ public class Programadepartamento {
 		departamentoDao.deleteById(id);
 		System.out.println("Delete completo ");
 		sc.close();
-		/*
-		System.out.println("Teste 5: update Departamento: ");
-		obj = departamentoDao.findById(10);
-		obj.setNome("TI");
-		departamentoDao.update(obj);
-		System.out.println("Alteração completa: "+ obj); 
 		
-		*/
+		System.out.println("Teste 5: update Departamento: ");
+		Departamento dep1 = departamentoDao.findById(1);
+		dep1.setNome("TI");
+		departamentoDao.update(dep1);
+		System.out.println("Alteração completa: "+ dep1); 
+		
 	
 	}
 	
