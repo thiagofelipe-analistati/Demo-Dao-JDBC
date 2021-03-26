@@ -19,6 +19,8 @@ public class Programa {
 		VendedorDao vendededorDao = DaoFactory.createVendedordao();
 		Vendedor obj = vendededorDao.findById(9);
 		System.out.println(obj);
+	}
+		/*
 		System.out.println("Teste 2: Pesquisa pelo ID do departamento: ");
 		Departamento departametno = new Departamento(2,null);
 		List<Vendedor> list = vendededorDao.FindByDepartamento(departametno);
@@ -48,6 +50,6 @@ public class Programa {
 		sc.close();
 	}
 	
-	
+	*/
 
 }
